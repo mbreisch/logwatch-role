@@ -1,10 +1,22 @@
 # file: logwatch/tasks/main.yml
 
+- name: Cron | Make sure cron is installed
+  apt:
+    pkg: cron
+    state: present
+
+- name: Cron | Make sure cron is enabled
+  service:
+    name: cron
+    state: started
+    enabled: yes
+
 - name: Logwatch | Make sure logwatch and its dependencies are installed
   apt:
     pkg: "{{item}}"
     state: present
   with_items:
+    - libdate-manip-perl
     - logwatch
 
 - name: Logwatch | Configure logwatch (/etc/logwatch/conf/logwatch.conf)

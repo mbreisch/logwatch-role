@@ -1,0 +1,21 @@
+---
+- name: Bring up docker containers
+  hosts: localhost
+  gather_facts: false
+  vars:
+    inventory:
+      - name: logwatch_host_1
+        image: "ubuntu-upstart:14.04"
+  roles:
+    - role: provision_docker
+      provision_docker_inventory: "{{ inventory }}"
+
+- name: Run logwatch tests
+  hosts: docker_containers
+  vars:
+    logwatch_services:
+        - {name: "All"}
+        - {name: "-zz-network"}
+        - {name: "-ftpd-messages"}
+  roles:
+    - role: logwatch-role
